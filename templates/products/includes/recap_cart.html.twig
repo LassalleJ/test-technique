@@ -1,52 +1,56 @@
 <table class="table table-striped table-hover">
     <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Produit</th>
-            <th scope="col">SKU</th>
-            <th scope="col">Quantité</th>
-            <th scope="col">Prix Unitaire HT</th>
-            <th scope="col">TVA</th>
-            <th scope="col">Prix Unitaire TTC</th>
-            <th scope="col">Prix Total TTC</th>
-            <th scope="col"></th>
-        </tr>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Produit</th>
+        <th scope="col">SKU</th>
+        <th scope="col">Quantité</th>
+        <th scope="col">Prix Unitaire HT</th>
+        <th scope="col">TVA</th>
+        <th scope="col">Prix Unitaire TTC</th>
+        <th scope="col">Prix Total TTC</th>
+        <th scope="col"></th>
+    </tr>
     </thead>
     <tbody>
+    <div  class ="js-cart" data-cart="{{ cart|serialize(format = 'json') }}" ></div>
     {% for product in cart.products %}
 
-        <tr>
-            <td>{{ product.product.id }}</td>
+        <tr class="product-row">
+            <td class="product-id">{{ product.product.id }}</td>
             <td>{{ product.product.title[:30] ~ '...' }}</td>
             <td>{{ product.product.sku }}</td>
             <td class="quantity-table">
-                <button class="quantity">
-                    <i class="fa-solid fa-minus"></i>
-                </button>
-                <label>
-                    <input type="text" value="{{ product.quantity }}" />
-                </label>
-                <button class="quantity">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
+
+                <div class="button-groups d-flex">
+                    <button class="quantity" data-controller="quantity" data-type="minus">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <label>
+                        <input type="text" id="quantity-input" value="{{ product.quantity }}"/>
+                    </label>
+                    <button class="quantity" data-controller="quantity" data-type="add">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
             </td>
             <td>{{ product.product.priceHT }} €</td>
             <td>{{ product.tva }} %</td>
             <td>{{ product.ttcPrice|round(2) }} €</td>
             <td>{{ product.ttcTotal|round(2) }} €</td>
-            <td class="text-center"><a href="#"><i class="fa-regular fa-trash-can"></i></a></td>
+            <td class="text-center"><a href="{{ path('cart_remove', {id: product.product.Id}) }}"><i class="fa-regular fa-trash-can"></i></a></td>
         </tr>
     {% endfor %}
     </tbody>
     <tfoot>
-        <tr>
-            <td colspan="7" class="text-end fw-bold mr-5">TOTAL :</td>
-            {% if cart.totalPrice > 0  %}
-            <td class="text-end">{{cart.totalPrice | round(2)}} €</td>
-            {% else %}
+    <tr>
+        <td colspan="7" class="text-end fw-bold mr-5">TOTAL :</td>
+        {% if cart.totalPrice > 0 %}
+            <td class="text-end">{{ cart.totalPrice | round(2) }} €</td>
+        {% else %}
             <td class="text-end"> --,-- €</td>
-            {% endif %}
-            <td></td>
-        </tr>
+        {% endif %}
+        <td></td>
+    </tr>
     </tfoot>
 </table>
