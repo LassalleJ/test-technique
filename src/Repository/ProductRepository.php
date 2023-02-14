@@ -38,4 +38,16 @@ class ProductRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function findActiveProducts(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.isActivated = :bool')
+            ->andWhere('p.priceHT > :val')
+            ->leftJoin('p.vat', 'v')
+            ->setParameters([':bool'=> true, ':val' => 0])
+            ->getQuery()
+            ->getResult();
+
+    }
 }
