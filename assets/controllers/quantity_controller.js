@@ -24,6 +24,25 @@ export default class extends Controller {
                 .closest('.button-groups')
                 .find('input')
                 .val(quantity)
+            $.ajax({
+                type: "POST",
+                url: ("localhost:8000/cart/add"),
+                data: {
+                    'cart': $('.js-cart').data('cart'),
+                    'quantity': quantity,
+                    'id':$(this)
+                        .closest('.product-row')
+                        .find('.product-id')
+                        .text()
+                },
+                success: function (data) {
+                    $('#loader').addClass('d-none');
+                    $('#errorReportModal').modal('hide');
+                    $('#toast-message').text(data.message)
+                    $('#successContentToast').toast("show")
+                }
+            });
         })
     }
 }
+

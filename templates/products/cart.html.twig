@@ -5,7 +5,7 @@
     <h2>Récapitulatif de mon panier</h2>
 
     {% if cart is not null and cart.products is not empty %}
-        <button class="my-5 button"><i class="fa-solid fa-ban"></i> Vider mon panier</button>
+        <a href="{{ path('cart_empty') }}"><button class="my-5 button"><i class="fa-solid fa-ban"></i> Vider mon panier</button></a>
         {{ include('products/includes/recap_cart.html.twig') }}
     {% else %}
         <h3 class="text-center mt-5">Votre panier est vide.</h3>
