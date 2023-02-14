@@ -4,22 +4,31 @@ namespace App\Services;
 
 use App\DTO\Cart;
 use App\Entity\Product;
+use App\Entity\Vat;
 use App\Interfaces\CartServicesInterface;
 
 class CartServices implements CartServicesInterface
 {
-    public function calculateTTC(Product $product): void
+    public function calculateTTC(Product $product, float $tva): float
     {
-        // TODO: Implement calculateTTC() method.
+        $HTprice = $product->getPriceHT();
+        $TTCprice = $HTprice + ($HTprice * $tva /100);
+        return $TTCprice;
     }
 
-    public function calculateTotal(Product $product, int $quantity): void
+    public function calculateTotal(Product $product, float $tva, int $quantity=1): float
     {
-        // TODO: Implement calculateTotal() method.
+        $HTprice = $product->getPriceHT();
+        return $HTprice + ($HTprice * $tva /100) * $quantity;
     }
 
-    public function calculateFinalTotal(Cart $cart): void
+    public function calculateFinalTotal(Cart $cart): float
     {
-        // TODO: Implement calculateFinalTotal() method.
+        $totalTotal=0;
+        $products=$cart->products;
+        foreach ($products as $product) {
+            $totalTotal = $totalTotal + $product['ttcTotal'];
+        }
+        return $totalTotal;
     }
 }

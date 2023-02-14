@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\Cart;
 use App\Entity\Product;
+use App\Entity\Vat;
 use App\Events\CartEvent;
 use App\Interfaces\CartServicesInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,11 +32,22 @@ class CartController extends AbstractController
         $session = $request->getSession();
         foreach($session->all() as $key=>$product) {
             if (str_starts_with($key, 'product_')) {
-                $cart->addProduct($product);
+                $vatRepository=$this->entityManager->getRepository(Vat::class);
+                $tvaAmount = $vatRepository->findOneBy(['id'=>$product->getVat()])->getAmount();
+                $cart->addProduct(
+                    $product,
+                    $tvaAmount,
+                    $this->cartServices->calculateTTC($product, $tvaAmount),
+                    $this->cartServices->calculateTotal($product, $tvaAmount),
+
+                );
             }
         }
+        $cart->setTotalPrice($this->cartServices->calculateFinalTotal($cart))
 
-        $event = new CartEvent($cart, $this->cartServices);
+        ;
+
+        $event = new CartEvent($cart, $this->cartServices, $this->entityManager);
 
         $this->dispatcher->dispatch($event, CartEvent::NAME);
 

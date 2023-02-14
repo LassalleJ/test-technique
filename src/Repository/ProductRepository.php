@@ -45,7 +45,7 @@ class ProductRepository extends ServiceEntityRepository
             ->where('p.isActivated = :bool')
             ->andWhere('p.priceHT > :val')
             ->leftJoin('p.vat', 'v')
-            ->setParameters([':bool'=> true, ':val' => 0])
+            ->setParameters(['bool'=> true, 'val' => 0])
             ->getQuery()
             ->getResult();
 
