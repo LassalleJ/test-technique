@@ -29,7 +29,7 @@
                     <label>
                         <input type="text" id="quantity-input" value="{{ product.quantity }}"/>
                     </label>
-                    <button class="quantity" data-controller="quantity" data-type="add">
+                    <button id="add-quantity" data-href="{{ path('cart_add') }}" class="quantity" data-controller="quantity" data-type="add">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
