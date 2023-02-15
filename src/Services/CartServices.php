@@ -12,22 +12,24 @@ class CartServices implements CartServicesInterface
     public function calculateTTC(Product $product, float $tva): float
     {
         $HTprice = $product->getPriceHT();
-        return $HTprice + ($HTprice * $tva /100);
+        $result = $HTprice + $HTprice * $tva / 100;
+        return floor($result * 100) / 100;
     }
 
     public function calculateTotal(Product $product, float $tva, int $quantity): float
     {
         $HTprice = $product->getPriceHT();
-        return ($HTprice + ($HTprice * $tva /100)) * $quantity;
+        $result = ($HTprice + ($HTprice * $tva / 100)) * $quantity;
+        return floor($result * 100) / 100;
     }
 
     public function calculateFinalTotal(Cart $cart): float
     {
-        $totalTotal=0;
-        $products=$cart->products;
+        $totalTotal = 0;
+        $products = $cart->products;
         foreach ($products as $product) {
             $totalTotal = $totalTotal + $product['ttcTotal'];
         }
-        return $totalTotal;
+        return floor($totalTotal * 100) / 100;;
     }
 }
