@@ -32,6 +32,12 @@ class CartController extends AbstractController
     public function index(Request $request): Response
     {
         $session = $request->getSession();
+
+        /**
+         * Si le panier existe en session, on le récupère,
+         * si non, on crée un nouvel object panier et on le set en session
+         */
+
         if ($session->get('cart') === null) {
             $cart = new Cart();
 
@@ -39,18 +45,23 @@ class CartController extends AbstractController
         } else {
             $cart = $session->get('cart');
         }
+
         /**
-         * Récupérer les produits en session
+         * Récupérer les produits et leur quantité en session
          */
+
         foreach ($session->all() as $key => $product) {
-            if (str_starts_with($key, 'product_')) {
+            if (str_starts_with($key, 'product_') && !str_ends_with($key,'_quantity')) {
                 $cart->addProduct(
                     $product,
+                    $session->get($key . '_quantity') ?: 1
                 );
-                $session->remove($key);
+
+            }
+            if (str_starts_with($key, 'product_')) {
+            $session->remove($key);
             }
         }
-//        dd($cart);
         $event = new CartEvent($cart, $this->cartServices, $this->entityManager);
         $this->dispatcher->dispatch($event, CartEvent::NAME);
 
@@ -62,7 +73,6 @@ class CartController extends AbstractController
     #[Route(path: '/add', name: 'add')]
     public function addQuantity(Request $request): JsonResponse
     {
-        dd($request);
         $session = $request->getSession();
         $session = $this->requestStack->getMainRequest()->getSession();
         foreach ($session->all() as $key => &$product) {
@@ -79,6 +89,10 @@ class CartController extends AbstractController
         $session = $request->getSession();
         $cart = $session->get('cart');
 
+        /**
+         * Retirer le produit du panier
+         */
+
         $cart->removeProductFromCart($product);
         return $this->redirectToRoute('cart_index');
     }
@@ -87,6 +101,11 @@ class CartController extends AbstractController
     public function emptyCart(Request $request)
     {
         $session = $request->getSession();
+
+        /**
+         * Vider le panier sans détruire complètement la session
+         */
+
         $session->remove('cart');
         return $this->redirectToRoute('cart_index');
     }

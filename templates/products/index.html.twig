@@ -29,7 +29,7 @@
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                             </div>
-                            <a href="{{ path('product_add', {id: product.id}) }}"><button class="addToCart"><i class="fa-solid fa-cart-plus"></i></button></a>
+                            <a data-controller="addToCart" data-id="{{ product.id }}" href="{{ path('product_add', {id: product.id}) }}"><button class="addToCart" data-controller="addToCart"><i class="fa-solid fa-cart-plus"></i></button></a>
                         </div>
                     </div>
                 </article>
