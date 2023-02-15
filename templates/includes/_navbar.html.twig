@@ -28,7 +28,8 @@
         </div>
         <div class="cart-container">
             <div class="cart">
-                <a href="{{ path('cart_index') }}"><i class="fa-brands fa-opencart"></i><span id="counter">0</span></a>
+                <a id="cart-link" href="{{ path('cart_index') }}"><i class="fa-brands fa-opencart"></i></a>
+                <span id="counter" data-controller="cartLink">0</span>
             </div>
         </div>
     </nav>

@@ -26,7 +26,7 @@ export default class extends Controller {
                 .val(quantity)
             $.ajax({
                 type: "POST",
-                url: ("localhost:8000/cart/add"),
+                url: $(this).data('href'),
                 data: {
                     'cart': $('.js-cart').data('cart'),
                     'quantity': quantity,
@@ -37,9 +37,9 @@ export default class extends Controller {
                 },
                 success: function (data) {
                     $('#loader').addClass('d-none');
-                    $('#errorReportModal').modal('hide');
-                    $('#toast-message').text(data.message)
-                    $('#successContentToast').toast("show")
+                    // $('#errorReportModal').modal('hide');
+                    // $('#toast-message').text(data.message)
+                    // $('#successContentToast').toast("show")
                 }
             });
         })

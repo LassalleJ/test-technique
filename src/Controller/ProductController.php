@@ -29,7 +29,7 @@ class ProductController extends AbstractController
     }
 
     #[Route(path: '/add/{id}', name: 'add')]
-    public function addProductToCart(Request $request, Product $product):Response
+    public function addProductToCart(Request $request, Product $product): Response
     {
         $session=$request->getSession();
         $session->set('product_' . $product->getId(), $product);

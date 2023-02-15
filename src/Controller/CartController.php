@@ -32,7 +32,7 @@ class CartController extends AbstractController
     public function index(Request $request): Response
     {
         $session = $request->getSession();
-        if ($session->get('cart') == null) {
+        if ($session->get('cart') === null) {
             $cart = new Cart();
 
             $session->set('cart', $cart);
@@ -62,6 +62,7 @@ class CartController extends AbstractController
     #[Route(path: '/add', name: 'add')]
     public function addQuantity(Request $request): JsonResponse
     {
+        dd($request);
         $session = $request->getSession();
         $session = $this->requestStack->getMainRequest()->getSession();
         foreach ($session->all() as $key => &$product) {
